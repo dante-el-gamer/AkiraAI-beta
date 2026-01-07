@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy & Conditions - Akira AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d0d0d;
+            --accent-color: #e63946;
+            --text-primary: #ffffff;
+            --text-secondary: #b9bbbe;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+        }
+
+        h1 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+
+        p,
+        li {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 24px;
+            background: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Privacy & Conditions</h1>
+
+        <h2>Local Storage</h2>
+        <p>This web application uses the browser's <code>localStorage</code> to keep your name and chat history. This
+            means your data never leaves your computer unless you explicitly share it.</p>
+
+        <h2>Third Party APIs</h2>
+        <p>Akira AI uses the Google Gemini API to generate responses. When you chat, your messages are sent to Google's
+            servers for processing according to their privacy policies.</p>
+
+        <h2>No Accounts</h2>
+        <p>We do not use an account system. If you clear your browser's site data or cache, your history and name will
+            be lost.</p>
+
+        <a href="../../index.html" class="back-btn">Go Back to Akira</a>
+    </div>
+</body>
+
+</html>

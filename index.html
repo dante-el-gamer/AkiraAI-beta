@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akira AI</title>
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Local AI will be loaded dynamically in script.js when needed -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+    <!-- Ola! aki empiesa l k se ve de la app -->
+    <div id="app">
+        <!-- Menu d vienbenida eto es lo primero k sale -->
+        <div id="auth-overlay" class="overlay">
+            <div class="welcome-card glass-panel">
+                <div class="welcome-header">
+                    <img src="icon.png" alt="Akira Logo" class="welcome-logo">
+                    <h1>Akira AI</h1>
+                    <p>Bienvenido. Por favor, elige cómo quieres entrar.</p>
+                </div>
+
+                <div class="welcome-methods">
+                    <div class="social-login">
+                        <button type="button" id="discord-login-btn" class="discord-btn"
+                            onclick="loginWithOAuth('discord')">
+                            <i class="fab fa-discord"></i> Discord
+                        </button>
+                        <button type="button" id="github-login-btn" class="github-btn"
+                            onclick="loginWithOAuth('github')">
+                            <i class="fab fa-github"></i> GitHub
+                        </button>
+                    </div>
+
+                    <div class="manual-divider">
+                        <span>o entra manualmente</span>
+                    </div>
+
+                    <div class="manual-login">
+                        <input type="text" id="auth-name" placeholder="Tu Nombre" required>
+                        <input type="password" id="auth-key" placeholder="OpenAI API Key (sk-...)" required>
+                        <button type="button" id="enter-chat-btn" class="btn-primary" onclick="handleEnterChat()">Entrar
+                            a la
+                            aventura</button>
+                    </div>
+                </div>
+
+                <img src="assets/images/IA-char-assets/Akira/menu/Normal/2.png" class="welcome-mascot-img" alt="Mascot">
+            </div>
+        </div>
+
+        <!-- Language Overlay -->
+        <div id="language-overlay" class="overlay hidden">
+            <div class="lang-card glass-panel">
+                <h2>Selecciona tu idioma</h2>
+                <div class="lang-grid">
+                    <button onclick="selectLanguage('en')">English</button>
+                    <button onclick="selectLanguage('es')">Español</button>
+                    <button onclick="selectLanguage('pt')">Português</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Chat UI -->
+        <div id="main-container" class="hidden">
+            <header class="glass-panel">
+                <div id="user-profile" onclick="document.getElementById('avatar-upload').click()">
+                    <div id="user-avatar-initial" class="avatar-initial">U</div>
+                    <img id="user-avatar-img" class="avatar-img hidden">
+                    <span id="user-display-name">Usuario</span>
+                </div>
+                <button id="settings-btn" class="icon-btn">⚙️</button>
+            </header>
+
+            <main>
+                <div id="pngtuber-side">
+                    <div id="pngtuber-character" class="floating">
+                        <img id="body-img" src="assets/images/IA-char-assets/Akira/PNGtuber/body_types/defaut.png"
+                            alt="Body" draggable="false">
+                        <img id="mouth-img" src="assets/images/IA-char-assets/Akira/PNGtuber/Types_of_mouth/close.png"
+                            alt="Mouth" class="character-layer layer-mouth" draggable="false">
+                        <img id="eyes-open" src="assets/images/IA-char-assets/Akira/PNGtuber/Types_of_eyes/open.png"
+                            alt="Eyes Open" class="character-layer layer-eyes" draggable="false">
+                        <img id="eyes-closed" src="assets/images/IA-char-assets/Akira/PNGtuber/Types_of_eyes/close.png"
+                            alt="Eyes Closed" class="character-layer layer-eyes hidden" draggable="false">
+
+                    </div>
+                </div>
+
+                <div id="chat-side">
+                    <div id="chat-messages" class="glass-panel"></div>
+                    <div id="media-preview" class="hidden"></div>
+                    <div id="input-area">
+                        <button id="attach-btn" class="icon-btn" title="Adjuntar archivo o foto">📎</button>
+                        <input type="text" id="chat-input" placeholder="Escribe algo..." autocomplete="off">
+                        <button id="send-btn">Enviar</button>
+                    </div>
+                    <input type="file" id="file-upload" class="hidden" accept="image/*,.txt,.js,.json,.md">
+                </div>
+            </main>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settings-overlay" class="overlay hidden">
+            <div class="modal glass-panel">
+                <h2>Ajustes</h2>
+
+                <div id="openai-settings" class="setting-group">
+                    <div class="setting-item">
+                        <label>OpenAI API Key</label>
+                        <input type="password" id="settings-key-openai" placeholder="API KEY">
+                    </div>
+                    <div class="setting-item">
+                        <label>Nombre del Modelo</label>
+                        <input type="text" id="settings-openai-model" placeholder="gpt-4o-mini">
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <label>Nombre</label>
+                    <input type="text" id="settings-name" placeholder="Nombre">
+                </div>
+
+                <div class="setting-item">
+                    <label>Mini Bio</label>
+                    <textarea id="settings-bio" rows="2"></textarea>
+                </div>
+
+                <div class="setting-item">
+                    <label>Idioma</label>
+                    <select id="settings-lang">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="pt">Português</option>
+                    </select>
+                </div>
+
+                <div class="setting-item">
+                    <label>Voz de Akira</label>
+                    <select id="settings-voice">
+                        <option value="">Cargando voces...</option>
+                    </select>
+                </div>
+
+                <div class="setting-item-toggle">
+                    <label>Usar TTS Local (Experimental)</label>
+                    <input type="checkbox" id="settings-use-local-tts">
+                </div>
+
+                <div class="setting-item" id="local-tts-url-group">
+                    <label>URL Backend TTS</label>
+                    <input type="text" id="settings-local-tts-url" placeholder="http://localhost:5000/tts">
+                </div>
+
+
+                <div class="modal-buttons">
+                    <button id="save-settings-btn" class="btn-primary">Guardar</button>
+                    <button id="reset-btn" class="btn-danger">Borrar Todo</button>
+                    <button id="close-settings-btn" class="btn-secondary">Cerrar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aki pondre lo d los secretos jaja -->
+        <div id="secret-overlay" class="hidden">
+            <!-- FNF Secret Container -->
+            <div id="fnf-secret-container" class="hidden">
+                <div class="fnf-lane fnf-lane-left">
+                    <img src="assets/images/Menu/Secret/Friday_Night_Funkin/assets/UI-keys.png" class="fnf-keys"
+                        alt="Keys Left">
+                    <img src="assets/images/Menu/Secret/Friday_Night_Funkin/assets/FNF-Logo.png" class="fnf-logo"
+                        alt="Logo">
+                </div>
+                <div class="fnf-lane fnf-lane-right">
+                    <img src="assets/images/Menu/Secret/Friday_Night_Funkin/assets/UI-keys.png" class="fnf-keys"
+                        alt="Keys Right">
+                    <img src="assets/images/Menu/Secret/Friday_Night_Funkin/assets/Player.gif" class="fnf-player"
+                        alt="Player">
+                </div>
+            </div>
+
+            <!-- Gibberish Secret Container -->
+            <div id="gibberish-secret-container" class="hidden secret-full-container">
+                <video id="gibberish-video" class="secret-video hidden"
+                    src="assets/images/Menu/Secret/Gibberish/Gibberish.mp4"></video>
+                <div id="gibberish-text-container" class="hidden secret-text-center">
+                    <h2 id="gibberish-countdown-text">It's just a joke, but wait <span id="gibberish-timer">5</span>
+                    </h2>
+                </div>
+            </div>
+
+
+        </div>
+
+        <script src="script.js"></script>
+</body>
+
+</html>

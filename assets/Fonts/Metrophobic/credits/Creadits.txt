@@ -1,0 +1,8 @@
+License: Public domain, GPL, OFL
+designer: Vernon Adams
+website: https://sansoxygen.com/
+Font Tags: sans serif, free for commercial use
+Font name: Metrophobic Font
+
+---[ EXTRA ]---
+https://fontmeme.com/fonts/metrophobic-font/

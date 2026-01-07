@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akira Voice Generator</title>
+    <link rel="icon" type="image/png" href="../../icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <img src="../../icon.png" alt="Akira Logo" class="logo">
+            <h1>Akira Voice Generator</h1>
+            <p class="subtitle">Genera audio con la voz de Akira usando Web Speech API</p>
+        </header>
+
+        <main>
+            <div class="card">
+                <div class="input-group">
+                    <label for="text-input">Texto a convertir</label>
+                    <textarea id="text-input" rows="5"
+                        placeholder="Escribe el texto que quieres convertir a voz...">¡Hola! Soy Akira. Esta es mi voz generada con Web Speech API.</textarea>
+                </div>
+
+                <div class="input-group">
+                    <label for="voice-mode-select">Modo de voz</label>
+                    <select id="voice-mode-select">
+                        <option value="webspeech">Web Speech API (Rápido, voz del sistema)</option>
+                        <option value="local">Modelo TTS Local (Consistente, requiere descarga)</option>
+                    </select>
+                    <small>Web Speech API es instantáneo. Modelo Local descarga ~45MB la primera vez.</small>
+                </div>
+
+                <div class="input-group">
+                    <label for="language-select">Idioma de la voz</label>
+                    <select id="language-select">
+                        <option value="es">Español</option>
+                        <option value="en">English</option>
+                        <option value="pt">Português</option>
+                        <option value="ja">日本語</option>
+                        <option value="it">Italiano</option>
+                        <option value="zh">中文</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="filename-input">Nombre del archivo</label>
+                    <input type="text" id="filename-input" value="akira-audio" placeholder="nombre-archivo">
+                    <small>.webm se agregará automáticamente</small>
+                </div>
+
+                <div class="button-group">
+                    <button id="preview-btn" class="btn btn-secondary">
+                        <span class="icon">▶️</span>
+                        Previsualizar
+                    </button>
+                    <button id="generate-btn" class="btn btn-primary">
+                        <span class="icon">💾</span>
+                        Generar y Descargar
+                    </button>
+                </div>
+
+                <div id="status" class="status hidden"></div>
+
+                <div id="model-download-progress" class="model-progress hidden">
+                    <div class="progress-header">
+                        <span id="model-status-text">Descargando modelo TTS...</span>
+                        <span id="model-progress-percent">0%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div id="model-progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card info-card">
+                <h3>ℹ️ Información</h3>
+                <ul>
+                    <li><strong>Motor de voz:</strong> Web Speech API o Modelo TTS Local (Transformers.js)</li>
+                    <li><strong>Formato:</strong> WebM (compatible con todos los navegadores modernos)</li>
+                    <li><strong>Web Speech API:</strong> Instantáneo, usa voces del sistema</li>
+                    <li><strong>Modelo Local:</strong> Voz consistente, descarga ~45MB (solo primera vez)</li>
+                    <li><strong>Costo:</strong> 100% gratis, sin APIs externas</li>
+                    <li><strong>Privacidad:</strong> Todo se procesa localmente en tu navegador</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer>
+            <p>Powered by Akira AI • <a href="../../index.html">Volver a Akira</a></p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
